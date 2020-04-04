@@ -1,5 +1,5 @@
 package ru.mertsalovda.audioplayer.ui.model
 
-class Track() {
+import java.io.Serializable
 
-}
+data class Track(val name: String, val duration: Long, val path: String) : Serializable
