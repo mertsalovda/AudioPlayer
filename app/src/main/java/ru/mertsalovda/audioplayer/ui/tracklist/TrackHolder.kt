@@ -9,15 +9,12 @@ import ru.mertsalovda.audioplayer.ui.model.Track
 class TrackHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val name = itemView.findViewById<TextView>(R.id.tvName)
-    private val duration = itemView.findViewById<TextView>(R.id.tvDuration)
 
     fun bind(
         track: Track,
         listener: TrackListAdapter.onClickListener
     ) {
         name.text = track.name
-        duration.text = "Длительность трека: ${track.duration}"
-
         itemView.setOnClickListener{
             listener.onClick(track)
         }

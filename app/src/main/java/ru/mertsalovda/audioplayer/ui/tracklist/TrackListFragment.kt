@@ -12,7 +12,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.fr_track_list.*
-import ru.mertsalovda.audioplayer.MainActivity
 
 import ru.mertsalovda.audioplayer.R
 import ru.mertsalovda.audioplayer.ui.model.Track

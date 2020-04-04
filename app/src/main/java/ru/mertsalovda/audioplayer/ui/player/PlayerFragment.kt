@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import kotlinx.android.synthetic.main.fr_player.*
 
 import ru.mertsalovda.audioplayer.R
@@ -34,15 +33,6 @@ class PlayerFragment() : Fragment() {
     }
 
     companion object {
-
         const val ARG_TRACK = "ARG_TRACK"
-
-        @JvmStatic
-        fun newInstance(track: Track) =
-            PlayerFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(ARG_TRACK, track)
-                }
-            }
     }
 }
