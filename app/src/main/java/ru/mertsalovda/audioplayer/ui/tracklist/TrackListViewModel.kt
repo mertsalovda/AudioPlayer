@@ -8,7 +8,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import ru.mertsalovda.audioplayer.ui.model.Track
 import ru.mertsalovda.audioplayer.utils.SearchSoundsUtils
-import java.io.File
 
 class TrackListViewModel : ViewModel() {
 
@@ -23,10 +22,13 @@ class TrackListViewModel : ViewModel() {
     @SuppressLint("CheckResult")
     fun load(){
         isLoad.postValue(true)
-        val list = listOf(Track("Track", 123465, ""))
-        tracks.postValue(list)
 
-        Observable.fromCallable { SearchSoundsUtils.getFiles(Environment.getRootDirectory(), mutableListOf()) }
+        disposable = Observable.fromCallable {
+            SearchSoundsUtils.getFiles(
+                Environment.getRootDirectory(),
+                mutableListOf()
+            )
+        }
             .subscribe {
                 val result = mutableListOf<Track>()
                 for (file in it) {
@@ -37,4 +39,10 @@ class TrackListViewModel : ViewModel() {
             }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        if(!disposable.isDisposed){
+            disposable.dispose()
+        }
+    }
 }
