@@ -60,11 +60,11 @@ class PlayerFragment : Fragment() {
 
         viewModel.maxProgress.observe(viewLifecycleOwner, Observer {
             progressBar.max = it
-            tvProgress.text = TimeUtils.msecToMin(it)
         })
 
         viewModel.progress.observe(viewLifecycleOwner, Observer {
             progressBar.progress = it
+            tvProgress.text = TimeUtils.msecToMin(progressBar.max - it)
         })
 
 
@@ -75,7 +75,7 @@ class PlayerFragment : Fragment() {
 
     companion object {
         const val ARG_TRACK = "ARG_TRACK"
-        const val FORWARD = 10
-        const val REWIND = 10
+        const val FORWARD = 1000
+        const val REWIND = 1000
     }
 }
