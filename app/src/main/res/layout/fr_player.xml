@@ -52,12 +52,26 @@
                 android:src="@drawable/ic_pause_black_24dp" />
 
             <ImageButton
+                android:id="@+id/btnStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_stop_black_24dp" />
+
+            <ImageButton
                 android:id="@+id/btnForward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_fast_forward_black_24dp" />
 
         </LinearLayout>
+
+        <TextView
+            android:layout_gravity="right"
+            android:id="@+id/tvProgress"
+            tools:text="06:33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

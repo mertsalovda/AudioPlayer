@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.fr_player.*
 
 import ru.mertsalovda.audioplayer.R
 import ru.mertsalovda.audioplayer.ui.model.Track
+import ru.mertsalovda.audioplayer.utils.TimeUtils
 
 class PlayerFragment : Fragment() {
     private lateinit var track: Track
@@ -29,6 +30,7 @@ class PlayerFragment : Fragment() {
     ): View? {
         viewModel = ViewModelProviders.of(this).get(PlayerViewModel::class.java)
         viewModel.track = track
+        viewModel.initMediaPlayer()
         return inflater.inflate(R.layout.fr_player, container, false)
     }
 
@@ -44,6 +46,10 @@ class PlayerFragment : Fragment() {
             viewModel.pause()
         }
 
+        btnStop.setOnClickListener {
+            viewModel.stop()
+        }
+
         btnForward.setOnClickListener {
             viewModel.forward(FORWARD)
         }
@@ -52,9 +58,15 @@ class PlayerFragment : Fragment() {
             viewModel.rewind(REWIND)
         }
 
+        viewModel.maxProgress.observe(viewLifecycleOwner, Observer {
+            progressBar.max = it
+            tvProgress.text = TimeUtils.msecToMin(it)
+        })
+
         viewModel.progress.observe(viewLifecycleOwner, Observer {
             progressBar.progress = it
         })
+
 
         viewModel.status.observe(viewLifecycleOwner, Observer {
             tvStatus.text = it.name
