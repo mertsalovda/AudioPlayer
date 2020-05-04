@@ -73,6 +73,11 @@ class PlayerFragment : Fragment() {
         })
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.stop()
+    }
+
     companion object {
         const val ARG_TRACK = "ARG_TRACK"
         const val FORWARD = 1000
