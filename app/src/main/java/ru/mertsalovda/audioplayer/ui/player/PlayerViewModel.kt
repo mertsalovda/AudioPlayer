@@ -33,6 +33,7 @@ class PlayerViewModel : ViewModel() {
         maxProgress.postValue(mediaPlayer?.duration)
         progress.postValue(0)
         status.postValue(Status.READY)
+        start()
     }
 
     private fun start() {
