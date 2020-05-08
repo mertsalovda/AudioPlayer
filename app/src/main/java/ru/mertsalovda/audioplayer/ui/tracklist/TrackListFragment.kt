@@ -61,7 +61,6 @@ class TrackListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
             }
 
         }
-
         override fun onAccuracyChanged(sensor: Sensor, i: Int) {}
     }
 

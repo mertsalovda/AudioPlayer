@@ -36,6 +36,18 @@ class PlayerViewModel : ViewModel() {
         start()
     }
 
+    fun pauseIfScreenDown(){
+        if (status.value == Status.PLAY) {
+            pauseDown()
+        }
+    }
+
+    fun playIfScreenUp(){
+        if (status.value == Status.PAUSE_DOWN) {
+            play()
+        }
+    }
+
     private fun start() {
         if (timer != null) {
             timer?.cancel()
@@ -55,6 +67,7 @@ class PlayerViewModel : ViewModel() {
                 start()
             }
             Status.PAUSE -> start()
+            Status.PAUSE_DOWN -> start()
             else -> return
         }
     }
@@ -63,6 +76,13 @@ class PlayerViewModel : ViewModel() {
         if (status.value == Status.PLAY) {
             mediaPlayer?.pause()
             status.postValue(Status.PAUSE)
+        }
+    }
+
+    fun pauseDown() {
+        if (status.value == Status.PLAY) {
+            mediaPlayer?.pause()
+            status.postValue(Status.PAUSE_DOWN)
         }
     }
 
@@ -121,5 +141,6 @@ enum class Status {
     STOP,
     PAUSE,
     PLAY,
-    READY
+    READY,
+    PAUSE_DOWN
 }
