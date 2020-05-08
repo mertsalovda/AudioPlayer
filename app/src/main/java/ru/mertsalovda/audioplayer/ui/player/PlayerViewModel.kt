@@ -79,7 +79,7 @@ class PlayerViewModel : ViewModel() {
         }
     }
 
-    fun pauseDown() {
+    private fun pauseDown() {
         if (status.value == Status.PLAY) {
             mediaPlayer?.pause()
             status.postValue(Status.PAUSE_DOWN)
