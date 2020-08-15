@@ -27,7 +27,9 @@ class PlayerViewModel : ViewModel() {
         mediaPlayer = MediaPlayer()
         mediaPlayer?.apply {
             isLooping = true
-            setDataSource(track.path)
+            if (track.path.isNotEmpty()) {
+                setDataSource(track.path)
+            }
             prepare()
         }
         maxProgress.postValue(mediaPlayer?.duration)
@@ -36,13 +38,13 @@ class PlayerViewModel : ViewModel() {
         start()
     }
 
-    fun pauseIfScreenDown(){
+    fun pauseIfScreenDown() {
         if (status.value == Status.PLAY) {
             pauseDown()
         }
     }
 
-    fun playIfScreenUp(){
+    fun playIfScreenUp() {
         if (status.value == Status.PAUSE_DOWN) {
             play()
         }

@@ -1,10 +1,6 @@
 package ru.mertsalovda.audioplayer.ui.player
 
 import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,58 +16,13 @@ import ru.mertsalovda.audioplayer.utils.TimeUtils
 
 class PlayerFragment : Fragment() {
     private lateinit var track: Track
-    private lateinit var viewModel: PlayerViewModel
-
-
-    private lateinit var sensorManager: SensorManager
-    private lateinit var sensorAcceleration: Sensor
-    private val accelerometerReading = FloatArray(3)
-    private val magnetometerReading = FloatArray(3)
-    private val rotationMatrix = FloatArray(9)
-    private val orientationAngles = FloatArray(3)
-
-    private val sensorListener: SensorEventListener = object : SensorEventListener {
-        override fun onSensorChanged(event: SensorEvent) {
-            if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-                System.arraycopy(
-                    event.values,
-                    0,
-                    accelerometerReading,
-                    0,
-                    accelerometerReading.size
-                )
-            } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
-                System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
-            }
-            updateOrientationAngles()
-        }
-
-        override fun onAccuracyChanged(sensor: Sensor, i: Int) {}
-    }
-
-    fun updateOrientationAngles() {
-        SensorManager.getRotationMatrix(
-            rotationMatrix,
-            null,
-            accelerometerReading,
-            magnetometerReading
-        )
-        SensorManager.getOrientation(rotationMatrix, orientationAngles)
-        Log.d(
-            "TAG",
-            "Z ${orientationAngles[0]}, X ${orientationAngles[1]}, Y ${orientationAngles[2]}"
-        )
-        if (orientationAngles[2] > 2.5f || orientationAngles[2] < -2.5f) {
-            viewModel.pauseIfScreenDown()
-        } else {
-            viewModel.playIfScreenUp()
-        }
-    }
+//    private lateinit var viewModel: PlayerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            track = it.getSerializable(ARG_TRACK) as Track
+            val argument = it.getSerializable(ARG_TRACK) ?: Track("", 0, "")
+            track = argument as Track
         }
     }
 
@@ -79,9 +30,9 @@ class PlayerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProviders.of(this).get(PlayerViewModel::class.java)
-        viewModel.track = track
-        viewModel.initMediaPlayer()
+//        viewModel = ViewModelProviders.of(this).get(PlayerViewModel::class.java)
+//        viewModel.track = track
+//        viewModel.initMediaPlayer()
         return inflater.inflate(R.layout.fr_player, container, false)
     }
 
@@ -89,68 +40,44 @@ class PlayerFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         tvTrackName.text = track.name
 
-        sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensorAcceleration = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-
         btnPlay.setOnClickListener {
-            viewModel.play()
+//            viewModel.play()
         }
 
         btnPause.setOnClickListener {
-            viewModel.pause()
+//            viewModel.pause()
         }
 
         btnStop.setOnClickListener {
-            viewModel.stop()
+//            viewModel.stop()
         }
 
         btnForward.setOnClickListener {
-            viewModel.forward(FORWARD)
+//            viewModel.forward(FORWARD)
         }
 
         btnRewind.setOnClickListener {
-            viewModel.rewind(REWIND)
+//            viewModel.rewind(REWIND)
         }
 
-        viewModel.maxProgress.observe(viewLifecycleOwner, Observer {
-            progressBar.max = it
-        })
+//        viewModel.maxProgress.observe(viewLifecycleOwner, Observer {
+//            progressBar.max = it
+//        })
 
-        viewModel.progress.observe(viewLifecycleOwner, Observer {
-            progressBar.progress = it
-            tvProgress.text = TimeUtils.msecToMin(progressBar.max - it)
-        })
+//        viewModel.progress.observe(viewLifecycleOwner, Observer {
+//            progressBar.progress = it
+//            tvProgress.text = TimeUtils.msecToMin(progressBar.max - it)
+//        })
 
 
-        viewModel.status.observe(viewLifecycleOwner, Observer {
-            tvStatus.text = it.name
-        })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
-            sensorManager.registerListener(
-                sensorListener,
-                accelerometer,
-                SensorManager.SENSOR_DELAY_NORMAL,
-                SensorManager.SENSOR_DELAY_UI
-            )
-        }
-        sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also { magneticField ->
-            sensorManager.registerListener(
-                sensorListener,
-                magneticField,
-                SensorManager.SENSOR_DELAY_NORMAL,
-                SensorManager.SENSOR_DELAY_UI
-            )
-        }
+//        viewModel.status.observe(viewLifecycleOwner, Observer {
+//            tvStatus.text = it.name
+//        })
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.stop()
-        sensorManager.unregisterListener(sensorListener)
+//        viewModel.stop()
     }
 
     companion object {
