@@ -36,6 +36,8 @@ class TrackListAdapter(private val listener: TrackListAdapter.onClickListener) :
         diffUtils.dispatchUpdatesTo(this)
     }
 
+    fun getTrack(index: Int) = tracks[index]
+
     interface onClickListener{
         fun onClick(track: Track)
     }
