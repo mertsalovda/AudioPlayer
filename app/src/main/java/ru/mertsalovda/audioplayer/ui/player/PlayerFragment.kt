@@ -40,17 +40,17 @@ class PlayerFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         tvTrackName.text = track.name
 
-        btnPlay.setOnClickListener {
+//        btnPlay.setOnClickListener {
 //            viewModel.play()
-        }
+//        }
 
-        btnPause.setOnClickListener {
+//        btnPause.setOnClickListener {
 //            viewModel.pause()
-        }
+//        }
 
-        btnStop.setOnClickListener {
+//        btnStop.setOnClickListener {
 //            viewModel.stop()
-        }
+//        }
 
         btnForward.setOnClickListener {
 //            viewModel.forward(FORWARD)

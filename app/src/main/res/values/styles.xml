@@ -14,4 +14,8 @@
         <item name="background">@android:color/transparent</item>
     </style>
 
+    <style name="PlayerImageButton">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>
