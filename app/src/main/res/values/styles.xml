@@ -7,14 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="imageButtonStyle">@style/MoreButtonStyle</item>
+        <item name="imageButtonStyle">@style/PlayerImageButton</item>
     </style>
 
-    <style name="MoreButtonStyle" parent="Widget.AppCompat.ImageButton">
-        <item name="background">@android:color/transparent</item>
-    </style>
-
-    <style name="PlayerImageButton">
+    <style name="PlayerImageButton" parent="Widget.AppCompat.ImageButton">
         <item name="android:background">@android:color/transparent</item>
     </style>
 
