@@ -69,10 +69,6 @@ class PlayerFragment : Fragment() {
 //            tvProgress.text = TimeUtils.msecToMin(progressBar.max - it)
 //        })
 
-
-//        viewModel.status.observe(viewLifecycleOwner, Observer {
-//            tvStatus.text = it.name
-//        })
     }
 
     override fun onPause() {
