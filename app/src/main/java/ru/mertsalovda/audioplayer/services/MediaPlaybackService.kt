@@ -7,7 +7,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.media.MediaBrowserServiceCompat
-import ru.mertsalovda.audioplayer.MainActivity
+import ru.mertsalovda.audioplayer.ui.MainActivity
 
 private const val MEDIA_ROOT_ID = "media_root_id"
 private const val EMPTY_MEDIA_ROOT_ID = "empty_root_id"
