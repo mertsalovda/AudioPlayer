@@ -16,6 +16,7 @@ import ru.mertsalovda.audioplayer.ui.model.Track
 class PlayerFragment : Fragment() {
     private lateinit var track: Track
     private lateinit var viewModel: PlayerViewModel
+    private var isNotTracking = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +31,7 @@ class PlayerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(PlayerViewModel::class.java)
-        viewModel.track = track
-        viewModel.initMediaPlayer()
+        viewModel.setTrackById(track.id)
         return inflater.inflate(R.layout.fr_player, container, false)
     }
 
@@ -51,12 +51,25 @@ class PlayerFragment : Fragment() {
             }
         })
 
+        viewModel.track.observe(viewLifecycleOwner, Observer {
+            tvTrackAuthor.text = it.artist
+            tvTrackName.text = it.title
+        })
+
         btnForward.setOnClickListener {
             viewModel.seekTo(FORWARD)
         }
 
         btnRewind.setOnClickListener {
             viewModel.seekTo(REWIND)
+        }
+
+        btnSkipNext.setOnClickListener {
+            viewModel.nextTrack()
+        }
+
+        btnSkipPrev.setOnClickListener {
+            viewModel.prevTrack()
         }
 
         viewModel.maxProgress.observe(viewLifecycleOwner, Observer {
@@ -71,17 +84,21 @@ class PlayerFragment : Fragment() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
+                isNotTracking = false
                 tmpProgress = seekBar.progress
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 viewModel.seekTo(seekBar.progress - tmpProgress)
+                isNotTracking = true
             }
 
         })
 
         viewModel.progress.observe(viewLifecycleOwner, Observer {
-            progressBar.progress = it
+            if (isNotTracking){
+                progressBar.progress = it
+            }
         })
 
     }
@@ -93,7 +110,7 @@ class PlayerFragment : Fragment() {
 
     companion object {
         const val ARG_TRACK = "ARG_TRACK"
-        const val FORWARD = 1000
-        const val REWIND = -1000
+        const val FORWARD = 10000
+        const val REWIND = -10000
     }
 }

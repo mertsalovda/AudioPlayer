@@ -6,11 +6,9 @@ import androidx.lifecycle.ViewModel
 import ru.mertsalovda.audioplayer.App
 import ru.mertsalovda.audioplayer.ui.model.Track
 import java.util.*
-import kotlin.math.abs
 
 class PlayerViewModel : ViewModel() {
 
-    lateinit var track: Track
     private var mediaPlayer: MediaPlayer? = null
 
     private var timer: Timer? = null
@@ -18,6 +16,9 @@ class PlayerViewModel : ViewModel() {
 
     private val _status = MutableLiveData(Status.STOP)
     val status: MutableLiveData<Status> = _status
+
+    private val _track = MutableLiveData<Track>(Track())
+    val track: MutableLiveData<Track> = _track
 
     private val _maxProgress = MutableLiveData(0)
     val maxProgress: MutableLiveData<Int> = _maxProgress
@@ -28,8 +29,8 @@ class PlayerViewModel : ViewModel() {
     fun initMediaPlayer() {
         mediaPlayer = MediaPlayer()
         mediaPlayer?.apply {
-            if (track.uri != null) {
-                setDataSource(App.context!!, track.uri!!)
+            if (track.value?.uri != null) {
+                setDataSource(App.context!!, track.value?.uri!!)
             }
             prepare()
         }
@@ -37,6 +38,11 @@ class PlayerViewModel : ViewModel() {
         progress.postValue(0)
         status.postValue(Status.READY)
         start()
+    }
+
+    fun setTrackById(id: Long){
+        track.value = App.getRepository().getById(id)
+        initMediaPlayer()
     }
 
     private fun start() {
@@ -67,6 +73,18 @@ class PlayerViewModel : ViewModel() {
             mediaPlayer?.pause()
             status.postValue(Status.PAUSE)
         }
+    }
+
+    fun nextTrack() {
+        stop()
+        track.postValue(App.getRepository().getNext())
+        initMediaPlayer()
+    }
+
+    fun prevTrack() {
+        stop()
+        track.postValue(App.getRepository().getPrevious())
+        initMediaPlayer()
     }
 
     fun stop() {

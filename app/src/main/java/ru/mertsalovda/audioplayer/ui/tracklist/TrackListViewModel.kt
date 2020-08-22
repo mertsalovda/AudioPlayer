@@ -19,22 +19,6 @@ class TrackListViewModel : ViewModel() {
 
     @SuppressLint("CheckResult")
     fun load(){
-//        isLoad.postValue(true)
-//
-//        disposable = Observable.fromCallable {
-//            SearchSoundsUtils.getFiles(
-//                Environment.getRootDirectory(),
-//                mutableListOf()
-//            )
-//        }
-//            .subscribe {
-//                val result = mutableListOf<Track>()
-//                for (file in it) {
-//                    result.add(Track(file.title, 0, file.absolutePath))
-//                }
-//                tracks.postValue(result)
-//                isLoad.postValue(false)
-//            }
         tracks.postValue(App.getRepository().getAll())
     }
 
