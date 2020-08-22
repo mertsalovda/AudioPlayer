@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fr_player.*
 import ru.mertsalovda.audioplayer.R
+import ru.mertsalovda.audioplayer.extensions.millisecToTime
 import ru.mertsalovda.audioplayer.ui.model.Track
 
 class PlayerFragment : Fragment() {
@@ -43,39 +45,55 @@ class PlayerFragment : Fragment() {
 
         viewModel.status.observe(viewLifecycleOwner, Observer {
             if (it == Status.PAUSE) {
-                btnPlayPause.setImageResource(R.drawable.ic_pause_black_64dp)
-            } else {
                 btnPlayPause.setImageResource(R.drawable.ic_play_arrow_black_64dp)
+            } else {
+                btnPlayPause.setImageResource(R.drawable.ic_pause_black_64dp)
             }
         })
 
         btnForward.setOnClickListener {
-            viewModel.forward(FORWARD)
+            viewModel.seekTo(FORWARD)
         }
 
         btnRewind.setOnClickListener {
-            viewModel.rewind(REWIND)
+            viewModel.seekTo(REWIND)
         }
 
         viewModel.maxProgress.observe(viewLifecycleOwner, Observer {
             progressBar.max = it
         })
 
-//        viewModel.progress.observe(viewLifecycleOwner, Observer {
-//            progressBar.progress = it
-//            tvProgress.text = TimeUtils.msecToMin(progressBar.max - it)
-//        })
+        progressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            var tmpProgress = 0
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                tvMaxProgress.text = "-${(seekBar.max - progress).millisecToTime()}"
+                tvProgress.text = progress.millisecToTime()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                tmpProgress = seekBar.progress
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                viewModel.seekTo(seekBar.progress - tmpProgress)
+            }
+
+        })
+
+        viewModel.progress.observe(viewLifecycleOwner, Observer {
+            progressBar.progress = it
+        })
 
     }
 
     override fun onPause() {
         super.onPause()
-//        viewModel.stop()
+        viewModel.stop()
     }
 
     companion object {
         const val ARG_TRACK = "ARG_TRACK"
         const val FORWARD = 1000
-        const val REWIND = 1000
+        const val REWIND = -1000
     }
 }

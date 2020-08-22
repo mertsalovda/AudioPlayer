@@ -7,8 +7,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import ru.mertsalovda.audioplayer.ui.model.Track
-
-
 class TrackRepository(private var tracks: MutableList<Track> = mutableListOf()) :
     IRepository<Track> {
 
@@ -16,7 +14,15 @@ class TrackRepository(private var tracks: MutableList<Track> = mutableListOf()) 
 
     override fun getAll(): MutableList<Track> = tracks
 
-    override fun getById(id: Long): Track = tracks.filter { it.id == id }[0]
+    override fun getById(id: Long): Track? {
+        var track: Track? = null
+        val list = tracks.filter { it.id == id }
+        if (list[0] != null){
+            track = list[0]
+            current = tracks.indexOf(track)
+        }
+        return track
+    }
 
     override fun getNext(): Track {
         return if (current + 1 != tracks.size) {
@@ -45,7 +51,8 @@ class TrackRepository(private var tracks: MutableList<Track> = mutableListOf()) 
     override fun update(item: Track): Boolean {
         var track: Track? = tracks.filter { it.id == item.id }[0]
         return if (track != null) {
-            track = item
+            val index = tracks.indexOf(track)
+            tracks[index] = item
             true
         } else {
             false
@@ -74,14 +81,14 @@ class TrackRepository(private var tracks: MutableList<Track> = mutableListOf()) 
             val artistColumn: Int = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
             val albumId: Int = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
             val durationUnit = musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
-            val path = musicCursor.getColumnIndex(MediaStore.Audio.Media.DATA)
+            val pathColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.DATA)
             val albumKey: Int = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_KEY)
             //add songs to list
             do {
                 val id: Long = musicCursor.getLong(idColumn)
                 val title: String = musicCursor.getString(titleColumn)
                 val artist: String = musicCursor.getString(artistColumn)
-                val path: String = musicCursor.getString(path)
+                val path: String = musicCursor.getString(pathColumn)
                 val uri = ContentUris.withAppendedId(musicUri, id)
                 insert(
                     Track(
@@ -97,3 +104,5 @@ class TrackRepository(private var tracks: MutableList<Track> = mutableListOf()) 
         }
     }
 }
+
+

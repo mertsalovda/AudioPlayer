@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import ru.mertsalovda.audioplayer.App
 import ru.mertsalovda.audioplayer.ui.model.Track
 import java.util.*
+import kotlin.math.abs
 
 class PlayerViewModel : ViewModel() {
 
@@ -27,7 +28,6 @@ class PlayerViewModel : ViewModel() {
     fun initMediaPlayer() {
         mediaPlayer = MediaPlayer()
         mediaPlayer?.apply {
-            isLooping = true
             if (track.uri != null) {
                 setDataSource(App.context!!, track.uri!!)
             }
@@ -81,23 +81,13 @@ class PlayerViewModel : ViewModel() {
         }
     }
 
-    fun forward(seconds: Int) {
+    fun seekTo(seconds: Int) {
         if (status.value == Status.PLAY || status.value == Status.PAUSE) {
             var current: Int? = 0
             if (mediaPlayer != null) {
                 current = mediaPlayer?.currentPosition
             }
             current?.plus(seconds)?.let { mediaPlayer?.seekTo(it) }
-        }
-    }
-
-    fun rewind(seconds: Int) {
-        if (status.value == Status.PLAY || status.value == Status.PAUSE) {
-            var current: Int? = 0
-            if (mediaPlayer != null) {
-                current = mediaPlayer?.currentPosition
-            }
-            current?.minus(seconds)?.let { mediaPlayer?.seekTo(it) }
         }
     }
 
@@ -112,7 +102,7 @@ class PlayerViewModel : ViewModel() {
     }
 
     fun nextStatus() {
-        if (status.value == Status.STOP || status.value == Status.PAUSE){
+        if (status.value == Status.STOP || status.value == Status.PAUSE) {
             play()
         } else {
             pause()

@@ -1,14 +1,11 @@
 package ru.mertsalovda.audioplayer.ui.tracklist
 
 import android.annotation.SuppressLint
-import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import ru.mertsalovda.audioplayer.App
 import ru.mertsalovda.audioplayer.ui.model.Track
-import ru.mertsalovda.audioplayer.utils.SearchSoundsUtils
 
 class TrackListViewModel : ViewModel() {
 
