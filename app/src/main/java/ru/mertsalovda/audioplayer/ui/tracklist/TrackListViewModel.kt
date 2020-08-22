@@ -1,6 +1,5 @@
 package ru.mertsalovda.audioplayer.ui.tracklist
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.Disposable
@@ -17,7 +16,6 @@ class TrackListViewModel : ViewModel() {
     private val _tracks = MutableLiveData<List<Track>>(mutableListOf())
     val tracks: MutableLiveData<List<Track>> = _tracks
 
-    @SuppressLint("CheckResult")
     fun load(){
         tracks.postValue(App.getRepository().getAll())
     }

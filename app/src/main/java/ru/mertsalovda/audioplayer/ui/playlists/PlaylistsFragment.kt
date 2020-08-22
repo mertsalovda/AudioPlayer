@@ -11,7 +11,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.fr_track_list.*
 import ru.mertsalovda.audioplayer.R
 
-class PlaylistsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class PlaylistsFragment : Fragment() {
 
     private lateinit var navController: NavController
 
@@ -30,8 +30,6 @@ class PlaylistsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        refresher.setOnRefreshListener(this)
-        onRefresh()
     }
 
     override fun onResume() {
@@ -40,8 +38,5 @@ class PlaylistsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onPause() {
         super.onPause()
-    }
-
-    override fun onRefresh() {
     }
 }

@@ -1,5 +1,6 @@
 package ru.mertsalovda.audioplayer.ui.player
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ class PlayerFragment : Fragment() {
     private lateinit var track: Track
     private lateinit var viewModel: PlayerViewModel
     private var isNotTracking = true
+    private var listener: ItemClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +26,18 @@ class PlayerFragment : Fragment() {
             val argument = it.getSerializable(ARG_TRACK) ?: Track()
             track = argument as Track
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is ItemClickListener) {
+            listener = context
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
     override fun onCreateView(
@@ -96,7 +110,7 @@ class PlayerFragment : Fragment() {
         })
 
         viewModel.progress.observe(viewLifecycleOwner, Observer {
-            if (isNotTracking){
+            if (isNotTracking) {
                 progressBar.progress = it
             }
         })
@@ -108,9 +122,22 @@ class PlayerFragment : Fragment() {
         viewModel.stop()
     }
 
+    interface ItemClickListener {
+        fun onItemClick()
+    }
+
     companion object {
+        const val TAG = "PLAYER_FRAGMENT_TAG"
         const val ARG_TRACK = "ARG_TRACK"
         const val FORWARD = 10000
         const val REWIND = -10000
+
+        fun newInstance(track: Track): PlayerFragment {
+            val args = Bundle()
+            args.putSerializable(ARG_TRACK, track)
+            val fragment = PlayerFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

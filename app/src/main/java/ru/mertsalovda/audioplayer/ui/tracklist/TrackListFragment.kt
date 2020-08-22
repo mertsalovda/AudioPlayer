@@ -1,30 +1,21 @@
 package ru.mertsalovda.audioplayer.ui.tracklist
 
-import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.fr_track_list.*
 import ru.mertsalovda.audioplayer.R
 import ru.mertsalovda.audioplayer.ui.model.Track
 import ru.mertsalovda.audioplayer.ui.player.PlayerFragment
-import java.util.*
-import kotlin.math.abs
 
-class TrackListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
+class TrackListFragment : Fragment(), PlayerFragment.ItemClickListener,
     TrackListAdapter.onClickListener {
 
     private lateinit var viewModel: TrackListViewModel
@@ -36,7 +27,7 @@ class TrackListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(TrackListViewModel::class.java)
-        return inflater.inflate(R.layout.fr_track_list, container, false)
+        return inflater.inflate(R.layout.fr_coordinator, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,29 +41,20 @@ class TrackListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
         recycler.layoutManager = LinearLayoutManager(this.context)
         recycler.adapter = adapter
 
-        refresher.setOnRefreshListener(this)
-
-        viewModel.isLoad.observe(viewLifecycleOwner, Observer {
-            refresher.isRefreshing = it
-        })
 
         viewModel.tracks.observe(viewLifecycleOwner, Observer {
 
             adapter.addData(it, true)
         })
-        onRefresh()
     }
 
     override fun onResume() {
         super.onResume()
+        viewModel.load()
     }
 
     override fun onPause() {
         super.onPause()
-    }
-
-    override fun onRefresh() {
-        viewModel.load()
     }
 
     companion object {
@@ -83,5 +65,8 @@ class TrackListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
         val bundle = Bundle()
         bundle.putSerializable(PlayerFragment.ARG_TRACK, track)
         navController.navigate(R.id.action_trackListFragment_to_playerFragment, bundle)
+    }
+
+    override fun onItemClick() {
     }
 }
