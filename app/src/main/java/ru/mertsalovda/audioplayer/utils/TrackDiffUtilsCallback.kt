@@ -21,7 +21,7 @@ class TrackDiffUtilsCallback(
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldMessage = oldList[oldItemPosition]
         val newMessage = newList[newItemPosition]
-        return oldMessage.name == newMessage.name
+        return oldMessage.title == newMessage.title
                 && oldMessage.duration == newMessage.duration
                 && oldMessage.path == newMessage.path
 

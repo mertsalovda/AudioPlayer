@@ -14,7 +14,7 @@ class TrackHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         track: Track,
         listener: TrackListAdapter.onClickListener
     ) {
-        name.text = track.name
+        name.text = track.title
         itemView.setOnClickListener{
             listener.onClick(track)
         }

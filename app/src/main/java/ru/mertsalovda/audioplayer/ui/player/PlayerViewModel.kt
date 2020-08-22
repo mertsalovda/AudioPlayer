@@ -3,6 +3,7 @@ package ru.mertsalovda.audioplayer.ui.player
 import android.media.MediaPlayer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.mertsalovda.audioplayer.App
 import ru.mertsalovda.audioplayer.ui.model.Track
 import java.util.*
 
@@ -27,8 +28,8 @@ class PlayerViewModel : ViewModel() {
         mediaPlayer = MediaPlayer()
         mediaPlayer?.apply {
             isLooping = true
-            if (track.path.isNotEmpty()) {
-                setDataSource(track.path)
+            if (track.uri != null) {
+                setDataSource(App.context!!, track.uri!!)
             }
             prepare()
         }
@@ -107,6 +108,14 @@ class PlayerViewModel : ViewModel() {
         if (timer != null) {
             timer?.cancel();
             timer = null;
+        }
+    }
+
+    fun nextStatus() {
+        if (status.value == Status.STOP || status.value == Status.PAUSE){
+            play()
+        } else {
+            pause()
         }
     }
 

@@ -30,39 +30,6 @@ class TrackListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     private lateinit var viewModel: TrackListViewModel
     private val adapter = TrackListAdapter(this)
     private lateinit var navController: NavController
-    private lateinit var sensorManager: SensorManager
-    private lateinit var sensorAcceleration: Sensor
-
-    private var lastUpdate: Long = 0
-    private var lastX: Float = 0.0f
-    private var lastY: Float = 0.0f
-    private var lastZ: Float = 0.0f
-
-    private val sensorListener: SensorEventListener = object : SensorEventListener {
-        override fun onSensorChanged(sensorEvent: SensorEvent) {
-            when (sensorEvent.sensor.type) {
-                Sensor.TYPE_ACCELEROMETER -> {
-                    val (x, y, z) = sensorEvent.values
-                    val currentTime = System.currentTimeMillis()
-                    val dt: Long = currentTime - lastUpdate
-                    if (dt > 100) {
-                        lastUpdate = currentTime
-                        val speed = abs(x + y + z - lastX - lastY - lastZ) / dt * 10000
-                        if (speed > SHAKE_THRESHOLD) {
-                            val random = Random().nextInt(adapter.itemCount)
-                            Toast.makeText(context, "Трек №$random", Toast.LENGTH_SHORT).show()
-                            onClick(adapter.getTrack(random))
-                        }
-                        lastX = x;
-                        lastY = y;
-                        lastZ = z;
-                    }
-                }
-            }
-
-        }
-        override fun onAccuracyChanged(sensor: Sensor, i: Int) {}
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,9 +46,6 @@ class TrackListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensorAcceleration = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         recycler.layoutManager = LinearLayoutManager(this.context)
         recycler.adapter = adapter
@@ -101,16 +65,10 @@ class TrackListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
 
     override fun onResume() {
         super.onResume()
-        sensorManager.registerListener(
-            sensorListener,
-            sensorAcceleration,
-            SensorManager.SENSOR_DELAY_NORMAL
-        )
     }
 
     override fun onPause() {
         super.onPause()
-        sensorManager.unregisterListener(sensorListener)
     }
 
     override fun onRefresh() {

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import ru.mertsalovda.audioplayer.App
 import ru.mertsalovda.audioplayer.ui.model.Track
 import ru.mertsalovda.audioplayer.utils.SearchSoundsUtils
 
@@ -21,22 +22,23 @@ class TrackListViewModel : ViewModel() {
 
     @SuppressLint("CheckResult")
     fun load(){
-        isLoad.postValue(true)
-
-        disposable = Observable.fromCallable {
-            SearchSoundsUtils.getFiles(
-                Environment.getRootDirectory(),
-                mutableListOf()
-            )
-        }
-            .subscribe {
-                val result = mutableListOf<Track>()
-                for (file in it) {
-                    result.add(Track(file.name, 0, file.absolutePath))
-                }
-                tracks.postValue(result)
-                isLoad.postValue(false)
-            }
+//        isLoad.postValue(true)
+//
+//        disposable = Observable.fromCallable {
+//            SearchSoundsUtils.getFiles(
+//                Environment.getRootDirectory(),
+//                mutableListOf()
+//            )
+//        }
+//            .subscribe {
+//                val result = mutableListOf<Track>()
+//                for (file in it) {
+//                    result.add(Track(file.title, 0, file.absolutePath))
+//                }
+//                tracks.postValue(result)
+//                isLoad.postValue(false)
+//            }
+        tracks.postValue(App.getRepository().getAll())
     }
 
     override fun onCleared() {
